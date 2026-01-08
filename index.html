@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habit Heatmap</title>
+
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- APP -->
+<div id="app" hidden>
+  <header class="header">
+    <div class="header-content">
+      <div>
+        <h1>Habit Heatmap</h1>
+        <p id="welcome"></p>
+      </div>
+
+      <div class="header-actions">
+        <button class="theme-toggle">🌙</button>
+        <button class="logout">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <section class="habits" id="habitsContainer"></section>
+
+    <!-- NOVO: estado vazio -->
+    <p id="emptyState" class="empty-state hidden">
+      Você ainda não criou nenhum hábito.  
+      Comece com algo simples hoje 🌱
+    </p>
+
+    <section class="actions">
+      <button class="primary-btn" id="newHabitBtn">+ Novo hábito</button>
+    </section>
+
+  </main>
+
+</div>
+
+<!-- MODAL LOGIN / CADASTRO -->
+<div class="modal-backdrop hidden" id="authModal">
+  <div class="modal">
+    <h2 id="authTitle">Entrar</h2>
+    <p id="authSubtitle">Acesse sua conta para continuar</p>
+
+    <input type="text" id="username" placeholder="Usuário" />
+    <input type="password" id="password" placeholder="Senha" />
+
+    <button class="primary-btn" id="loginBtn">Entrar</button>
+
+    <p class="toggle-auth">
+      Não tem conta?
+      <button id="toggleAuth">Criar conta</button>
+    </p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
