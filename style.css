@@ -299,6 +299,12 @@ body.dark .logout:hover {
   cursor: pointer;
 }
 
+.error {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin: 8px 0 12px;
+}
+
 /* =====================
    UTIL
 ===================== */

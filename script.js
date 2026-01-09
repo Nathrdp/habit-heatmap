@@ -24,6 +24,7 @@ const toggleAuth = document.getElementById('toggleAuth');
 const authTitle = document.getElementById('authTitle');
 const authSubtitle = document.getElementById('authSubtitle');
 const welcome = document.getElementById('welcome');
+const authError = document.getElementById('authError');
 
 // Estado de autenticação
 let isRegister = false;
@@ -34,6 +35,11 @@ if (!currentUser) {
   authModal.classList.remove('hidden');
 } else {
   startApp();
+}
+
+function showError(message) {
+  authError.textContent = message;
+  authError.classList.remove('hidden');
 }
 
 // Alternar entre login e cadastro
@@ -49,33 +55,44 @@ toggleAuth.addEventListener('click', () => {
 
 // Lidar com login/cadastro
 loginBtn.addEventListener('click', () => {
+  authError.classList.add('hidden');
+
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
 
-  if (!username || !password) return alert('Preencha todos os campos');
+  if (!username || !password) {
+  showError('Preencha todos os campos');
+  return;
+}
 
   const key = `user: ${username}`;
   const saved = JSON.parse(localStorage.getItem(key));
 
   if (isRegister) {
-    if (saved) return alert('Usuário já existe');
-    localStorage.setItem(key, JSON.stringify({ password }));
-  } else {
-    if (!saved || saved.password !== password)
-      return alert('Usuário inválido');
+  if (saved) {
+    alert('Usuário já existe');
+    return;
   }
+
+  localStorage.setItem(key, JSON.stringify({ password }));
+} else {
+  if (!saved) {
+    showError('Usuário não encontrado');
+    return;
+  }
+
+  if (saved.password !== password) {
+    showError('Senha incorreta');
+    return;
+  }
+}
+
 
   localStorage.setItem('currentUser', username);
   currentUser = username;
   authModal.classList.add('hidden');
   startApp();
 });
-
-document.querySelector('.logout')?.addEventListener('click', () => {
-  localStorage.removeItem('currentUser');
-  location.reload();
-});
-
 
 //***APP
 
@@ -87,14 +104,29 @@ const emptyState = document.getElementById('emptyState');
 function startApp() {
   app.hidden = false;
   welcome.textContent = `Bem-vinda(o), ${currentUser} 👋`;
+
+  document.querySelector('.logout')?.addEventListener('click', () => {
+  localStorage.removeItem('currentUser');
+  location.reload();
+  });
+
   loadHabits();
 }
 
 // Carregar hábitos do localStorage
 function loadHabits() {
-  habits = JSON.parse(localStorage.getItem(`habits:${currentUser}`)) || [];
+  try {
+    const data = localStorage.getItem(`habits:${currentUser}`);
+    habits = data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Erro ao carregar hábitos:', error);
+    habits = [];
+    localStorage.removeItem(`habits:${currentUser}`);
+  }
+
   renderHabits();
 }
+
 
 // Salvar hábitos no localStorage
 function saveHabits() {
